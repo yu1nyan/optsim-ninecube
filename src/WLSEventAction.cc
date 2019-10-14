@@ -96,7 +96,11 @@ void WLSEventAction::BeginOfEventAction(const G4Event* evt)
         fPhotCountY[j] = 0;
     for (int i = 0; i < 3; i++)
         for (int j = 0; j < 3; j++)
+        {
             fPhotCountZ[i][j] = 0;
+            fHittimeZ[i][j] = 0;
+        }
+
     fPhottime = 0;
     fPhotlasttime = 0;
 }
@@ -201,8 +205,10 @@ void WLSEventAction::EndOfEventAction(const G4Event* evt)
     G4cout << "<<< fPhotCountX_1= " << fPhotCountX[1] << G4endl; // add
     G4cout << "<<< fPhotCountY_1= " << fPhotCountY[1] << G4endl; // add
     G4cout << "<<< fPhotCountZ_11= " << fPhotCountZ[1][1] << G4endl; // add
-    G4cout << "<<< fPhotTime= "   << fPhottime   << G4endl;// add
+    G4cout << "<<< fPhotTime= "   << fPhottime   << G4endl; // add
     G4cout << "<<< fPhotlastTime= " << fPhotlasttime << G4endl; // add
+    G4cout << "<<< fHittimeZ_11= " << fHittimeZ[1][1] << G4endl;
+
 
     G4AnalysisManager* ana = G4AnalysisManager::Instance();
     int ii = 0;
@@ -218,9 +224,16 @@ void WLSEventAction::EndOfEventAction(const G4Event* evt)
         ana->FillNtupleDColumn(ii++, fPhotCountY[j]);
     for (int i = 0; i < 3; i++)
         for (int j = 0; j < 3; j++)
+        {
             ana->FillNtupleDColumn(ii++, fPhotCountZ[i][j]);
+        }
     ana->FillNtupleDColumn(ii++, fPhottime);
     ana->FillNtupleDColumn(ii++, fPhotlasttime);
+    for (int i = 0; i < 3; i++)
+        for (int j = 0; j < 3; j++)
+        {
+            ana->FillNtupleDColumn(ii++, fHittimeZ[i][j]);
+        }
     ana->AddNtupleRow();
 }
 
