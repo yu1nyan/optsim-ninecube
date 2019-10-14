@@ -130,6 +130,12 @@ public:
             fHittimeZ[i][j] = a;
     }
 
+    // Trackの軌跡
+    void AddTrackPos(G4ThreeVector pos)
+    {
+        fTrajectory.push_back(pos);
+    }
+
     void GiveParticleInitialPosi(G4ThreeVector a);
 
 private:
@@ -157,6 +163,8 @@ private:
     double fPhottime; // add
     double fPhotlasttime; // add
     double fHittimeZ[3][3];
+
+    vector<G4ThreeVector> fTrajectory;
 };
 
 #endif

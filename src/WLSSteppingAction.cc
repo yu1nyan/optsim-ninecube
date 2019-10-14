@@ -190,11 +190,15 @@ void WLSSteppingAction::UserSteppingAction(const G4Step* theStep)
         // This is a primary track
         if (theTrack->GetCurrentStepNumber() == 1)
         {
-            // G4double x = theTrack->GetVertexPosition().x(); ﻿
-            // G4double y = theTrack->GetVertexPosition().y();
-            // G4double z = theTrack->GetVertexPosition().z();
+            G4double x = theTrack->GetVertexPosition().x(); ﻿
+            G4double y = theTrack->GetVertexPosition().y();
+            G4double z = theTrack->GetVertexPosition().z();
             // G4double pz = theTrack->GetVertexMomentumDirection().z();
             // G4double fInitTheta = theTrack->GetVertexMomentumDirection().angle(ZHat);
+            fEventAction->AddTrackPos(theTrack->GetVertexPosition());
+            G4cout << "parent pos x: " << x << G4endl;
+            G4cout << "parent pos y: " << y << G4endl;
+            G4cout << "parent pos z: " << z << G4endl;
         }
     }
 
