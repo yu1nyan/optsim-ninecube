@@ -192,6 +192,13 @@ void WLSTrajectory::DrawTrajectory() const
                 {
                     auxiliaryPoints.push_back(pos);
                 }
+
+                if(fParticleName == "e+")
+                {
+                    G4cout << "e+ trajectory x (aux): " << pos.getX() << G4endl;
+                    G4cout << "e+ trajectory y (aux): " << pos.getY() << G4endl;
+                    G4cout << "e+ trajectory z (aux): " << pos.getZ() << G4endl;
+                }
             }
         }
         const G4ThreeVector pos(aTrajectoryPoint->GetPosition());
