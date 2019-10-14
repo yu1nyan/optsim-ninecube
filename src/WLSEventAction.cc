@@ -57,7 +57,7 @@ WLSEventAction::WLSEventAction(WLSRunAction* runaction, WLSPrimaryGeneratorActio
     /* initialize with different name */ fPrimarysource(primarysource),
     /* initialize with different name */ fStacking(stacking),
     fVerboseLevel(0),
-    fPrintModulo(100), fDrawFlag("all")
+    fPrintModulo(100), fDrawFlag("charged")
 {
     fMPPCCollID = 0;
 
@@ -146,13 +146,13 @@ void WLSEventAction::EndOfEventAction(const G4Event* evt)
             }
             else if ((fDrawFlag == "charged") && (trj->GetCharge() != 0.))
                 trj->DrawTrajectory();
-            else if (trj->GetParticleName() == "opticalphoton")
-            {
-                G4cout << "We should be drawing an opticalphoton" << G4endl;
-                trj->SetForceDrawTrajectory(fForceDrawPhotons);
-                trj->SetForceNoDrawTrajectory(fForceNoPhotons);
-                trj->DrawTrajectory();
-            }
+            // else if (trj->GetParticleName() == "opticalphoton")
+            // {
+            //     G4cout << "We should be drawing an opticalphoton" << G4endl;
+            //     trj->SetForceDrawTrajectory(fForceDrawPhotons);
+            //     trj->SetForceNoDrawTrajectory(fForceNoPhotons);
+            //     trj->DrawTrajectory();
+            // }
 
             // if(trj->GetParticleName() == "e+")
             // {
