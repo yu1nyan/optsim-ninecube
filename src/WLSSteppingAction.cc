@@ -188,10 +188,10 @@ void WLSSteppingAction::UserSteppingAction(const G4Step* theStep)
     if (theTrack->GetParentID() == 0)
     {
         // This is a primary track
-        if (theTrack->GetCurrentStepNumber() == 1)
-        {
-
-        }
+        // if (theTrack->GetCurrentStepNumber() == 1)
+        // {
+        //
+        // }
 
         G4double x = theTrack->GetVertexPosition().x();
         G4double y = theTrack->GetVertexPosition().y();
