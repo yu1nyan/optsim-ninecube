@@ -164,7 +164,7 @@ private:
     double fPhotlasttime; // add
     double fHittimeZ[3][3];
 
-    vector<G4ThreeVector> fTrajectory;
+    std::vector<G4ThreeVector> fTrajectory;
 };
 
 #endif
