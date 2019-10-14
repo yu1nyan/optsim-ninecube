@@ -57,7 +57,7 @@ WLSEventAction::WLSEventAction(WLSRunAction* runaction, WLSPrimaryGeneratorActio
     /* initialize with different name */ fPrimarysource(primarysource),
     /* initialize with different name */ fStacking(stacking),
     fVerboseLevel(0),
-    fPrintModulo(100), fDrawFlag("all")
+    fPrintModulo(100), fDrawFlag("charged")
 {
     fMPPCCollID = 0;
 

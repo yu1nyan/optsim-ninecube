@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# run.shのbsubしない版　動作確認用に
+
 # https://yutarine.blogspot.com/2018/02/shell-command-bc02.html
 # [コマンド] bc(数値計算ソフト)の結果出力で、小数点前の0(ゼロ)を省略させないようにする方法
 
@@ -42,6 +44,6 @@ for ((itX=0 ; itX<$NPINTS  ; itX++)); do
 	echo "$PWD/wls $MACRO $ROOTNAME" >> $SCR
 	echo "$MACRO $ROOTNAME"
 	#echo qsub $SCR
-	bsub -q h -J X${itX}_Y${itY} "./wls $MACRO $ROOTNAME > ../output/log_X${itX}_Y${itY}.log 2>&1"
+	# bsub -q h -J X${itX}_Y${itY} "./wls $MACRO $ROOTNAME > ../output/log_X${itX}_Y${itY}.log 2>&1"
     done
 done
