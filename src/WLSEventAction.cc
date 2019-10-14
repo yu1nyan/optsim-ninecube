@@ -147,6 +147,7 @@ void WLSEventAction::EndOfEventAction(const G4Event* evt)
             else if ((fDrawFlag == "charged") && (trj->GetCharge() != 0.))
             {
                 G4cout << "trjID: " << i << G4endl;
+                G4cout << "ParticleType: " << trj->GetParticleName() << G4endl;
                 trj->DrawTrajectory();
             }
 
