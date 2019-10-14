@@ -205,7 +205,12 @@ void WLSTrajectory::DrawTrajectory() const
             stepPoints.push_back(pos);
         }
         if(fParticleName == "e+")
-            G4cout << "e+ trajectory z: " << pos.getX() << G4endl;
+        {
+            G4cout << "e+ trajectory x: " << pos.getX() << G4endl;
+            G4cout << "e+ trajectory y: " << pos.getY() << G4endl;
+            G4cout << "e+ trajectory z: " << pos.getZ() << G4endl;
+        }
+
     }
 
     if (lineRequired)
