@@ -139,25 +139,25 @@ void WLSEventAction::EndOfEventAction(const G4Event* evt)
         for (G4int i = 0; i < n_trajectories; i++)
         {
             WLSTrajectory* trj = (WLSTrajectory*) ((*(evt->GetTrajectoryContainer()))[i]);
-            // if (fDrawFlag == "all")
-            // {
-            //     // G4cout << "Now calling DrawTrajectory" << "  Particle Name: " << trj->GetParticleName() << G4endl;
-            //     trj->DrawTrajectory();
-            // }
-            // else if ((fDrawFlag == "charged") && (trj->GetCharge() != 0.))
-            //     trj->DrawTrajectory();
-            // else if (trj->GetParticleName() == "opticalphoton")
-            // {
-            //     G4cout << "We should be drawing an opticalphoton" << G4endl;
-            //     trj->SetForceDrawTrajectory(fForceDrawPhotons);
-            //     trj->SetForceNoDrawTrajectory(fForceNoPhotons);
-            //     trj->DrawTrajectory();
-            // }
-
-            if(trj->GetParticleName() == "e+")
+            if (fDrawFlag == "all")
             {
+                // G4cout << "Now calling DrawTrajectory" << "  Particle Name: " << trj->GetParticleName() << G4endl;
                 trj->DrawTrajectory();
             }
+            else if ((fDrawFlag == "charged") && (trj->GetCharge() != 0.))
+                trj->DrawTrajectory();
+            else if (trj->GetParticleName() == "opticalphoton")
+            {
+                G4cout << "We should be drawing an opticalphoton" << G4endl;
+                trj->SetForceDrawTrajectory(fForceDrawPhotons);
+                trj->SetForceNoDrawTrajectory(fForceNoPhotons);
+                trj->DrawTrajectory();
+            }
+
+            // if(trj->GetParticleName() == "e+")
+            // {
+            //     trj->DrawTrajectory();
+            // }
         }
     }
 

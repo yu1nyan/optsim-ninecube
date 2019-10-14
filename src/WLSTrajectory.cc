@@ -198,11 +198,13 @@ void WLSTrajectory::DrawTrajectory() const
         if (lineRequired)
         {
             trajectoryLine.push_back(pos);
+
         }
         if (markersRequired)
         {
             stepPoints.push_back(pos);
         }
+        G4cout << "trajectory z: " << pos.getX() << G4endl;
     }
 
     if (lineRequired)
