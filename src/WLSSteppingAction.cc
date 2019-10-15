@@ -193,9 +193,9 @@ void WLSSteppingAction::UserSteppingAction(const G4Step* theStep)
         //
         // }
 
-        G4double x = theStep->GetPreStepPoint().GetPosition().x();
-        G4double y = theStep->GetPreStepPoint().GetPosition().y();
-        G4double z = theStep->GetPreStepPoint().GetPosition().z();
+        G4double x = theStep->GetPreStepPoint()->GetPosition().x();
+        G4double y = theStep->GetPreStepPoint()->GetPosition().y();
+        G4double z = theStep->GetPreStepPoint()->GetPosition().z();
         // G4double pz = theTrack->GetVertexMomentumDirection().z();
         // G4double fInitTheta = theTrack->GetVertexMomentumDirection().angle(ZHat);
         fEventAction->AddTrackPos(theTrack->GetVertexPosition());
