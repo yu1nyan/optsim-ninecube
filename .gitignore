@@ -1,4 +1,3 @@
 *.root
 output*/
-*single_cube*
 build/
