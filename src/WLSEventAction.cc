@@ -151,18 +151,13 @@ void WLSEventAction::EndOfEventAction(const G4Event* evt)
                 trj->DrawTrajectory();
             }
 
-            // else if (trj->GetParticleName() == "opticalphoton")
-            // {
-            //     G4cout << "We should be drawing an opticalphoton" << G4endl;
-            //     trj->SetForceDrawTrajectory(fForceDrawPhotons);
-            //     trj->SetForceNoDrawTrajectory(fForceNoPhotons);
-            //     trj->DrawTrajectory();
-            // }
-
-            // if(trj->GetParticleName() == "e+")
-            // {
-            //     trj->DrawTrajectory();
-            // }
+            else if (trj->GetParticleName() == "opticalphoton")
+            {
+                G4cout << "We should be drawing an opticalphoton" << G4endl;
+                trj->SetForceDrawTrajectory(fForceDrawPhotons);
+                trj->SetForceNoDrawTrajectory(fForceNoPhotons);
+                trj->DrawTrajectory();
+            }
         }
     }
 
@@ -218,6 +213,13 @@ void WLSEventAction::EndOfEventAction(const G4Event* evt)
     G4cout << "<<< fPhotTime= "   << fPhottime   << G4endl; // add
     G4cout << "<<< fPhotlastTime= " << fPhotlasttime << G4endl; // add
     G4cout << "<<< fHittimeZ_11= " << fHittimeZ[1][1] << G4endl;
+    G4cout << "<<< fCubeInPosX= " << fCubeInPos.getX() << G4endl;
+    G4cout << "<<< fCubeInPosY= " << fCubeInPos.getY() << G4endl;
+    G4cout << "<<< fCubeInPosZ= " << fCubeInPos.getZ() << G4endl;
+    G4cout << "<<< fCubeOutPosX= " << fCubeOutPos.getX() << G4endl;
+    G4cout << "<<< fCubeOutPosY= " << fCubeOutPos.getY() << G4endl;
+    G4cout << "<<< fCubeOutPosZ= " << fCubeOutPos.getZ() << G4endl;
+
 
 
     G4AnalysisManager* ana = G4AnalysisManager::Instance();
@@ -240,10 +242,23 @@ void WLSEventAction::EndOfEventAction(const G4Event* evt)
     ana->FillNtupleDColumn(ii++, fPhottime);
     ana->FillNtupleDColumn(ii++, fPhotlasttime);
     for (int i = 0; i < 3; i++)
+    {
         for (int j = 0; j < 3; j++)
         {
-            ana->FillNtupleDColumn(ii++, fHittimeZ[i][j]);
+            if(fHittimeZ[i][j] != 0.0)
+                ana->FillNtupleDColumn(ii++, fHittimeZ[i][j]);
+            else
+                ii++;
         }
+    }
+    ana->FillNtupleDColumn(ii++, fCubeInPos.getX());
+    ana->FillNtupleDColumn(ii++, fCubeInPos.getY());
+    ana->FillNtupleDColumn(ii++, fCubeInPos.getZ());
+
+    ana->FillNtupleDColumn(ii++, fCubeOutPos.getX());
+    ana->FillNtupleDColumn(ii++, fCubeOutPos.getY());
+    ana->FillNtupleDColumn(ii++, fCubeOutPos.getZ());
+
     ana->AddNtupleRow();
 }
 

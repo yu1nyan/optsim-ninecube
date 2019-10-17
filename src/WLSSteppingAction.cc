@@ -193,15 +193,15 @@ void WLSSteppingAction::UserSteppingAction(const G4Step* theStep)
         //
         // }
 
-        G4double x = theStep->GetPreStepPoint()->GetPosition().x();
-        G4double y = theStep->GetPreStepPoint()->GetPosition().y();
-        G4double z = theStep->GetPreStepPoint()->GetPosition().z();
+        // TrackがCubeに入ったとき/出たときのTrack位置を保存
+        G4ThreeVector pos = theStep->GetPreStepPoint()->GetPosition();
+        if (pos.getZ() == 5.0)
+            fEventAction->AddCubeInPos(pos);
+        else if(pos.getZ() == -5.0)
+            fEventAction->AddCubeOutPos(pos);
+
         // G4double pz = theTrack->GetVertexMomentumDirection().z();
         // G4double fInitTheta = theTrack->GetVertexMomentumDirection().angle(ZHat);
-        fEventAction->AddTrackPos(theTrack->GetVertexPosition());
-        G4cout << "parent pos x: " << x << G4endl;
-        G4cout << "parent pos y: " << y << G4endl;
-        G4cout << "parent pos z: " << z << G4endl;
     }
 
     // Retrieve the status of the photon

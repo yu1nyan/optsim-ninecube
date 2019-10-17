@@ -104,9 +104,20 @@ void WLSRunAction::BeginOfRunAction(const G4Run* aRun)
     {
         for (int j = 0; j < 3; j++)
         {
-            sprintf(cname, "hittimeZ%d%d", i, j);
+            sprintf(cname, "hittimez%d%d", i, j);
             ana->CreateNtupleDColumn(cname);
         }
+    }
+    char coordinate[3] = { 'x', 'y', 'z' };
+    for (int i = 0; i < 3; i++)
+    {
+        sprintf(cname, "cubeinpos%c", coordinate[i]);
+        ana->CreateNtupleDColumn(cname);
+    }
+    for (int i = 0; i < 3; i++)
+    {
+        sprintf(cname, "cubeoutpos%c", coordinate[i]);
+        ana->CreateNtupleDColumn(cname);
     }
 
     ana->FinishNtuple(0);

@@ -50,9 +50,11 @@ set(wls_SCRIPTS
     vis.mac
     compile.sh
     run.sh
-	 run.mac
+	run.mac
     runtest.sh
     plot.C
+    runsurface.sh
+    runsurface.mac
    )
 
 foreach(_script ${wls_SCRIPTS})

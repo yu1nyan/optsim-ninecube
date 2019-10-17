@@ -131,9 +131,20 @@ public:
     }
 
     // Trackの軌跡
-    void AddTrackPos(G4ThreeVector pos)
+    // void AddTrackPos(G4ThreeVector pos)
+    // {
+    //     fTrajectory.push_back(pos);
+    // }
+
+    // Trackがキューブに入った/出たときのTrack位置
+    void AddCubeInPos(G4ThreeVector pos)
     {
-        fTrajectory.push_back(pos);
+        fCubeInPos = pos;
+    }
+
+    void AddCubeOutPos(G4ThreeVector pos)
+    {
+        fCubeOutPos = pos;
     }
 
     void GiveParticleInitialPosi(G4ThreeVector a);
@@ -164,7 +175,9 @@ private:
     double fPhotlasttime; // add
     double fHittimeZ[3][3];
 
-    std::vector<G4ThreeVector> fTrajectory;
+    // std::vector<G4ThreeVector> fTrajectory;
+    G4ThreeVector fCubeInPos;
+    G4ThreeVector fCubeOutPos;
 };
 
 #endif
