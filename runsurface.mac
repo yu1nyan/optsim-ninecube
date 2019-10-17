@@ -3,7 +3,7 @@
 /gps/ene/mono 500 MeV
 /gps/direction 0 0 -1 #Set momentum direction
 /gps/pos/centre ###CENTERX### ###CENTERY### 5 cm
-/gps/pos/type Surface
+/gps/pos/type Plane
 /gps/pos/shape Square
 /gps/pos/halfx ###HALFX### cm
 /gps/pos/halfy ###HALFY### cm
