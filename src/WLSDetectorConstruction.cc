@@ -67,7 +67,7 @@
 
 // ....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-WLSDetectorConstruction::WLSDetectorConstruction()
+WLSDetectorConstruction::WLSDetectorConstruction(double length, double gaplength, double mirror_reflectivity, double cube_reflectivity)
 // : fMaterials(NULL), fLogiHole(NULL), fLogiWorld(NULL),
     : fMaterials(NULL), fLogiFiberHoleX(NULL), fLogiFiberHoleY(NULL), fLogiFiberHoleZ(NULL),
     fLogiWorld(NULL), fPhysWorld(NULL),
@@ -79,13 +79,16 @@ WLSDetectorConstruction::WLSDetectorConstruction()
     fMirrorToggle = 0; // true;
     fMirrorPolish = 1.;
     fMPPCPolish = 1.;
+    fMirrorReflectivity = mirror_reflectivity;
 
-    fWLSfiberZ = 100 * cm;
+    // fWLSfiberZ = 100 * cm;
+    fWLSfiberZ = length / 2 * cm;
     // fWLSfiberRY  = 0.5*mm;
     fWLSfiberRY = 0.50 * mm - 0.04 * mm; // phi?
     fWLSfiberOrigin = 0.0;
 
-    fWLSfiberl = -70 * cm;
+    // fWLSfiberl = -70 * cm;
+    fWLSfiberl = (length / 2 - gaplength) * cm;
 
     fMPPCShape = "Square";
     fMPPCHalfL = fWLSfiberRY;
@@ -98,9 +101,12 @@ WLSDetectorConstruction::WLSDetectorConstruction()
 
     fBarLength = 1. * cm;
     fBarBase = 1. * cm;
-    fCoatingThickness = 0.3 * mm;
+    // fCoatingThickness = 0.3 * mm;
+    fCoatingThickness = 0.1 * mm;
     fCoatingRadius = 0.01 * mm;
+    fCubeReflectivity = cube_reflectivity;
 
+    fHolePos = 2.1 * mm;
     fHoleRadius = 0.70 * mm;
     double penetration = 0.05 * mm; // value for the time being
     // fHoleLength  = 1*cm;//fBarLength;
@@ -181,10 +187,10 @@ G4VPhysicalVolume*WLSDetectorConstruction::ConstructDetector()
     rotMY->rotateY(90. * deg);
     rotMX->rotateX(90. * deg);
 
-    G4double fiber_pos = 2 * mm;
-    G4ThreeVector xpVec(fiber_pos,      0, +fiber_pos);
-    G4ThreeVector ypVec(0,      +fiber_pos, -fiber_pos);
-    G4ThreeVector zpVec(-fiber_pos, -fiber_pos,      0);
+    // G4double fiber_pos = 2 * mm;
+    G4ThreeVector xpVec(fHolePos,          0, +fHolePos);
+    G4ThreeVector ypVec(0,         +fHolePos, -fHolePos);
+    G4ThreeVector zpVec(-fHolePos, -fHolePos,         0);
 
     solidExtrusion = new G4SubtractionSolid("solSubExtrusion1", solidExtrusion, fFiberHole, rotMX, xpVec);
     solidExtrusion = new G4SubtractionSolid("solSubExtrusion2", solidExtrusion, fFiberHole, rotMY, ypVec);
@@ -241,13 +247,20 @@ G4VPhysicalVolume*WLSDetectorConstruction::ConstructDetector()
 
     G4double p_TiO2[] = { 2.00 * eV, 3.47 * eV };
     const int nbins = sizeof(p_TiO2) / sizeof(G4double);
-    G4double refl_TiO2[] = { 0.97, 0.97 };
+    // G4double refl_TiO2[] = { 0.97, 0.97 };
     // G4double refl_TiO2[] = {0.90, 0.90};
+    G4double refl_TiO2[] = { fCubeReflectivity, fCubeReflectivity };
     assert(sizeof(refl_TiO2) == sizeof(p_TiO2));
     G4double effi_TiO2[] = { 0, 0 };
     assert(sizeof(effi_TiO2) == sizeof(p_TiO2));
     G4double rind_TiO2[] = { 2.2, 2.2 };
     assert(sizeof(effi_TiO2) == sizeof(p_TiO2));
+
+    G4cout << "###Charcters of the cube ###" << G4endl;
+    G4cout << ">> reflectivity of the cube = " << refl_TiO2[0] << G4endl;
+    G4cout << ">> refraction index of the cube = " << rind_TiO2[0] << G4endl;
+    //   G4cout << ">> refraction index of the cube = " << rind_TiO2[0] << G4endl;
+
     // Boundary Process
     // p210 ~ http://ftp.jaist.ac.jp/pub/Linux/Gentoo/distfiles/BookForAppliDev-4.10.1.pdf
     // reflectivity : the ratio of reflection
@@ -358,10 +371,12 @@ void WLSDetectorConstruction::ConstructFiber()
     rotMY->rotateY(90. * deg);
     rotMX->rotateX(90. * deg);
 
-    G4double fiber_pos = 2 * mm;
-    G4ThreeVector xpVec(+fiber_pos,      -fWLSfiberl, +fiber_pos);
-    G4ThreeVector ypVec(-fWLSfiberl,      +fiber_pos, -fiber_pos);
-    G4ThreeVector zpVec(-fiber_pos, -fiber_pos,      -fWLSfiberl);
+    // G4double fiber_pos = 2 * mm;
+    G4ThreeVector xpVec(+fHolePos,   -fWLSfiberl, +fHolePos);
+    G4ThreeVector ypVec(-fWLSfiberl, +fHolePos,   -fHolePos);
+    G4ThreeVector zpVec(-fHolePos,   -fHolePos,   -fWLSfiberl);
+    G4cout << "#### Places of the fibers in this simulation ####" << G4endl;
+    G4cout << "hHolePos: center position of the fiber << " << fHolePos << " : " << fWLSfiberl << G4endl;
 
     double fWLSfiberRClad2X = fWLSfiberRX + 0.02 * mm + 0.02 * mm;
     G4VSolid* solWLSfiberClad2 = new G4Tubs("fWLSFiberClad2X", 0, fWLSfiberRClad2X, fWLSfiberZ, 0.0 * rad, twopi * rad);
@@ -601,13 +616,15 @@ void WLSDetectorConstruction::ConstructFiber()
     {
         G4double xoffset_val = (i - 1) * sci_pitch;
         sprintf(pvname, "PhotonDetX%d", i);
-        new G4PVPlacement(rotMX, G4ThreeVector(xoffset_val + fiber_pos, fWLSfiberZ - fWLSfiberl, +fiber_pos), logicPhotonDetX, pvname, fLogiWorld, false, 0);
+        // new G4PVPlacement(rotMX, G4ThreeVector(xoffset_val + fiber_pos, fWLSfiberZ - fWLSfiberl, +fiber_pos), logicPhotonDetX, pvname, fLogiWorld, false, 0);
+        new G4PVPlacement(rotMX, G4ThreeVector(xoffset_val + fHolePos, fWLSfiberZ - fWLSfiberl, xoffset_val + fHolePos), logicPhotonDetX, pvname, fLogiWorld, false, 0);
     }
     for (int j = 0; j < 3; j++)
     {
         G4double yoffset_val = (j - 1) * sci_pitch;
         sprintf(pvname, "PhotonDetY%d", j);
-        new G4PVPlacement(rotMY, G4ThreeVector(fWLSfiberZ - fWLSfiberl, yoffset_val + fiber_pos, -fiber_pos), logicPhotonDetY, pvname, fLogiWorld, false, 0);
+        // new G4PVPlacement(rotMY, G4ThreeVector(fWLSfiberZ - fWLSfiberl, yoffset_val + fiber_pos, -fiber_pos), logicPhotonDetY, pvname, fLogiWorld, false, 0);
+        new G4PVPlacement(rotMY, G4ThreeVector(fWLSfiberZ - fWLSfiberl, yoffset_val + fHolePos, -fHolePos), logicPhotonDetY, pvname, fLogiWorld, false, 0);
     }
     for (int i = 0; i < 3; i++)
     {
@@ -616,9 +633,13 @@ void WLSDetectorConstruction::ConstructFiber()
         {
             G4double yoffset_val = (j - 1) * sci_pitch;
             sprintf(pvname, "PhotonDetZ%d%d", i, j);
-            new G4PVPlacement(0, G4ThreeVector(xoffset_val - fiber_pos, yoffset_val - fiber_pos, fWLSfiberZ - fWLSfiberl), logicPhotonDetZ, pvname, fLogiWorld, false, 0);
+            // new G4PVPlacement(0, G4ThreeVector(xoffset_val - fiber_pos, yoffset_val - fiber_pos, fWLSfiberZ - fWLSfiberl), logicPhotonDetZ, pvname, fLogiWorld, false, 0);
+            new G4PVPlacement(0, G4ThreeVector(xoffset_val - fHolePos, yoffset_val - fHolePos, fWLSfiberZ - fWLSfiberl), logicPhotonDetZ, pvname, fLogiWorld, false, 0);
         }
     }
+
+    G4cout << "length beween cube and MPPCs = " << fWLSfiberZ - fWLSfiberl << G4endl;
+
     G4VisAttributes* mppc_va = new G4VisAttributes(G4Colour(0.7, 0.7, 0.7)); // RGB
     mppc_va->SetForceSolid(true);
     logicPhotonDetX->SetVisAttributes(mppc_va);
@@ -643,8 +664,8 @@ void WLSDetectorConstruction::ConstructFiber()
     G4double refl_mppc[] = { fMPPCReflectivity, fMPPCReflectivity };
     assert(sizeof(refl_mppc) == sizeof(p_mppc));
     // ----- efficiency parameter
-    G4double effi_mppc[] = { 1, 1 };   // original
-    // G4double effi_mppc[] = {0.35, 0.30}; //
+    // G4double effi_mppc[] = { 1, 1 };   // original
+    G4double effi_mppc[] = { 0.35, 0.30 }; //
     assert(sizeof(effi_mppc) == sizeof(p_mppc));
 
     photonDetSurfProp->AddProperty("REFLECTIVITY", p_mppc, refl_mppc, nbins);
@@ -674,7 +695,7 @@ void WLSDetectorConstruction::ConstructFiber()
     G4double p_mirror[] = { 2.00 * eV, 3.47 * eV };
     // const G4int nbins = sizeof(p_mirror)/sizeof(G4double);
 
-    fMirrorReflectivity = 0.;
+    // fMirrorReflectivity = 0.;
     G4double refl_mirror[] = { fMirrorReflectivity, fMirrorReflectivity };
     assert(sizeof(refl_mirror) == sizeof(p_mirror));
     G4double effi_mirror[] = { 0, 0 };
@@ -684,11 +705,14 @@ void WLSDetectorConstruction::ConstructFiber()
     mirrorSurfaceProperty->AddProperty("EFFICIENCY", p_mirror, effi_mirror, nbins);
     mirrorSurface->SetMaterialPropertiesTable(mirrorSurfaceProperty);
     #if 1
-        //   G4double fiber_pos = 2*mm;
+        //   G4double fHolePos = 2*mm;
         new G4LogicalSkinSurface("MirrorSurface", logicMirror, mirrorSurface);
-        new G4PVPlacement(rotMX, G4ThreeVector(+fiber_pos, -fWLSfiberZ + fWLSfiberl, +fiber_pos), logicMirror, "Mirror", fLogiWorld, false, 0);
-        new G4PVPlacement(rotMY, G4ThreeVector(-fWLSfiberZ + fWLSfiberl, +fiber_pos, -fiber_pos), logicMirror, "Mirror", fLogiWorld, false, 0);
-        new G4PVPlacement(0,     G4ThreeVector(-fiber_pos, -fiber_pos, -fWLSfiberZ + fWLSfiberl), logicMirror, "Mirror", fLogiWorld, false, 0);
+        new G4PVPlacement(rotMX, G4ThreeVector(+fHolePos, -fWLSfiberZ + fWLSfiberl, +fHolePos), logicMirror, "Mirror", fLogiWorld, false, 0);
+        new G4PVPlacement(rotMY, G4ThreeVector(-fWLSfiberZ + fWLSfiberl, +fHolePos, -fHolePos), logicMirror, "Mirror", fLogiWorld, false, 0);
+        new G4PVPlacement(0,     G4ThreeVector(-fHolePos, -fHolePos, -fWLSfiberZ + fWLSfiberl), logicMirror, "Mirror", fLogiWorld, false, 0);
+        G4cout << "Mirrors are implemented in this simulation " << G4endl;
+        G4cout << ">> Reflectivity of this mirror = " << fMirrorReflectivity << G4endl;
+        G4cout << ">> Efficiency of this mirror = " << effi_mirror[0] << G4endl;
     #endif
 }
 

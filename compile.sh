@@ -1,4 +1,4 @@
-#!/bin/bash 
+#!/bin/bash
 
-cmake -DGeant4_DIR=$GEANT4_DIR/lib64 ../
+cmake ../
 make -j4

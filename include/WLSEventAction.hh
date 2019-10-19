@@ -111,17 +111,41 @@ public:
         fPhotCountZ[i][j] += a;
     }                                                                         // add
 
+    // そのイベントで最初にMPPCに光子が来た時間
     void AddPhottime(G4double a)
     {
         if (fPhottime == 0 || fPhottime > a)
             fPhottime = a;
     }                                                                  // add
-
+    // 最後に来た時間
     void AddPhotlasttime(G4double a)
     {
         if (fPhotlasttime < a)
             fPhotlasttime = a;
     }                                                    // add
+    // z readout ごとに最初に来た時間
+    void AddHittimeZ(G4int i, G4int j, G4int a)
+    {
+        if (fHittimeZ[i][j] == 0 || fHittimeZ[i][j] > a)
+            fHittimeZ[i][j] = a;
+    }
+
+    // Trackの軌跡
+    // void AddTrackPos(G4ThreeVector pos)
+    // {
+    //     fTrajectory.push_back(pos);
+    // }
+
+    // Trackがキューブに入った/出たときのTrack位置
+    void AddCubeInPos(G4ThreeVector pos)
+    {
+        fCubeInPos = pos;
+    }
+
+    void AddCubeOutPos(G4ThreeVector pos)
+    {
+        fCubeOutPos = pos;
+    }
 
     void GiveParticleInitialPosi(G4ThreeVector a);
 
@@ -149,6 +173,11 @@ private:
     int fPhotCountZ[3][3]; // add
     double fPhottime; // add
     double fPhotlasttime; // add
+    double fHittimeZ[3][3];
+
+    // std::vector<G4ThreeVector> fTrajectory;
+    G4ThreeVector fCubeInPos;
+    G4ThreeVector fCubeOutPos;
 };
 
 #endif

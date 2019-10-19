@@ -1,4 +1,4 @@
-//
+﻿//
 // ********************************************************************
 // * License and Disclaimer                                           *
 // *                                                                  *
@@ -28,16 +28,16 @@
 /// \file optical/wls/wls.cc
 /// \brief Main program of the optical/wls example
 //
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+// ....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef WIN32
-#include <unistd.h>
+    #include <unistd.h>
 #endif
 
 #ifdef G4MULTITHREADED
-#include "G4MTRunManager.hh"
+    #include "G4MTRunManager.hh"
 #else
-#include "G4RunManager.hh"
+    #include "G4RunManager.hh"
 #endif
 
 #include "G4UImanager.hh"
@@ -50,131 +50,154 @@
 #include "WLSActionInitialization.hh"
 
 #ifdef G4VIS_USE
-#include "G4VisExecutive.hh"
+    #include "G4VisExecutive.hh"
 #endif
 
 #ifdef G4UI_USE
-#include "G4UIExecutive.hh"
+    #include "G4UIExecutive.hh"
 #endif
 
 // argc holds the number of arguments (including the name) on the command line
 // -> it is ONE when only the name is  given !!!
 // argv[0] is always the name of the program
 // argv[1] points to the first argument, and so on
+// please
+// ....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-int main(int argc,char** argv) 
+int main(int argc, char** argv)
 {
-#ifdef G4MULTITHREADED
-  	G4MTRunManager * runManager = new G4MTRunManager;
-#else
-  	G4int seed = 123;
-  	if (argc  > 2) seed = atoi(argv[argc-1]);
+    #ifdef G4MULTITHREADED
+        G4MTRunManager* runManager = new G4MTRunManager;
+    #else
+        G4int seed = 123;
+        if (argc  > 2)
+            seed = atoi(argv[argc - 1]);
 
-	G4String inpName;
-	if (argc==3) inpName = argv[2];
-	else         inpName = "cube";
-	
-	if (argv[1]!=NULL) G4cout << "input macro  name is " << argv[1] << G4endl;
-	G4cout << "input rootfile name is " << inpName << G4endl;
+        G4String inpName;
+        if (argc > 2)
+            inpName = argv[2];
+        else
+            inpName = "cube";
 
-  // Choose the Random engine and set the seed
+        G4double length = 200;
+        G4double gaplength;
+        G4double mirror_reflectivity = 0;
+        G4double cube_reflectivity = 0.97;
+        if (argc > 3)
+            length = atof(argv[3]);
+        gaplength = length / 2;
+        if (argc > 4)
+            gaplength = atof(argv[4]);
+        if (argc > 5)
+            mirror_reflectivity = atof(argv[5]);
+        if (argc > 6)
+            cube_reflectivity = atof(argv[6]);
 
-  G4Random::setTheEngine(new CLHEP::RanecuEngine);
-  G4Random::setTheSeed(seed);
+        if (argv[1] != NULL)
+            G4cout << "input macro  name is " << argv[1] << G4endl;
+        G4cout << "input rootfile name is " << inpName << G4endl;
+        G4cout << "length : gaplength : mirror_reflectivity : cube_reflectivity" << length << " " << gaplength << " " << mirror_reflectivity << " " << cube_reflectivity << G4endl;
 
-  G4RunManager * runManager = new G4RunManager;
-#endif
+        // Choose the Random engine and set the seed
 
-  G4String physName = "QGSP_BERT_HP";
+        G4Random::setTheEngine(new CLHEP::RanecuEngine);
+        G4Random::setTheSeed(seed);
 
-#ifndef WIN32
-  G4int c = 0;
-  while ((c=getopt(argc,argv,"p")) != -1)
-  {
-     switch (c)
-     {
-       case 'p':
-         physName = optarg;
-         G4cout << "Physics List used is " <<  physName << G4endl;
-         break;
-       case ':':       /* -p without operand */
-         fprintf(stderr, "Option -%c requires an operand\n", optopt);
-         break;
-       case '?':
-         fprintf(stderr, "Unrecognised option: -%c\n", optopt);
-     }
-  }
-#endif
+        G4RunManager* runManager = new G4RunManager;
+    #endif
 
-  // Set mandatory initialization classes
-  //
-  // Detector construction
-  WLSDetectorConstruction* detector = new WLSDetectorConstruction();
-  runManager->SetUserInitialization(detector);
-  // Physics list
-  runManager->SetUserInitialization(new WLSPhysicsList(physName));
-  // User action initialization
-  runManager->SetUserInitialization(new WLSActionInitialization(detector,inpName));
+    G4String physName = "QGSP_BERT_HP";
 
-#ifdef G4VIS_USE
-  // Initialize visualization
-  //
-  G4VisManager* visManager = new G4VisExecutive;
-  // G4VisExecutive can take a verbosity argument - see /vis/verbose guidance.
-  // G4VisManager* visManager = new G4VisExecutive("Quiet");
-  visManager->Initialize();
-#endif
+    #ifndef WIN32
+        G4int c = 0;
+        while ((c = getopt(argc, argv, "p")) != -1)
+        {
+            switch (c)
+            {
+                case 'p':
+                    physName = optarg;
+                    G4cout << "Physics List used is " <<  physName << G4endl;
+                    break;
+                case ':': /* -p without operand */
+                    fprintf(stderr, "Option -%c requires an operand\n", optopt);
+                    break;
+                case '?':
+                    fprintf(stderr, "Unrecognised option: -%c\n", optopt);
+            }
+        }
+    #endif
 
-  // Get the pointer to the User Interface manager
+    // Set mandatory initialization classes
+    //
+    // Detector construction
+    WLSDetectorConstruction* detector = new WLSDetectorConstruction(length, gaplength, mirror_reflectivity, cube_reflectivity);
+    runManager->SetUserInitialization(detector);
+    // Physics list
+    runManager->SetUserInitialization(new WLSPhysicsList(physName));
+    // User action initialization
+    runManager->SetUserInitialization(new WLSActionInitialization(detector, inpName));
 
-  G4UImanager * UImanager = G4UImanager::GetUIpointer();
+    #ifdef G4VIS_USE
+        // Initialize visualization
+        //
+        G4VisManager* visManager = new G4VisExecutive;
+        // G4VisExecutive can take a verbosity argument - see /vis/verbose guidance.
+        // G4VisManager* visManager = new G4VisExecutive("Quiet");
+        visManager->Initialize();
+    #endif
 
-#ifndef WIN32
-  G4int optmax = argc;
-  if (argc > 2)  { optmax = optmax-1; }
+    // Get the pointer to the User Interface manager
 
-  if (optind < optmax)
-  {
-     G4String command = "/control/execute ";
-     for ( ; optind < optmax; optind++)
-     {
-         G4String macroFilename = argv[optind];
-         UImanager->ApplyCommand(command+macroFilename);
-     }
-  }
-#else  // Simple UI for Windows runs, no possibility of additional arguments
-  if (argc!=1)
-  {
-     G4String command = "/control/execute ";
-     G4String fileName = argv[1];
-     UImanager->ApplyCommand(command+fileName);
-  }
-#endif
-  else  {
-     // Define (G)UI terminal for interactive mode
-#ifdef G4UI_USE
-     G4UIExecutive * ui = new G4UIExecutive(argc,argv);
-#ifdef G4VIS_USE
-     UImanager->ApplyCommand("/control/execute init.in");
-     //UImanager->ApplyCommand("/control/execute vis.mac");
-#endif
-     if (ui->IsGUI())
-        UImanager->ApplyCommand("/control/execute gui.mac");
-     ui->SessionStart();
-     delete ui;
-#endif
-  }
+    G4UImanager* UImanager = G4UImanager::GetUIpointer();
 
-  // job termination
+    #ifndef WIN32
+        G4int optmax = argc;
+        if (argc > 2)
+        {
+            optmax = optmax - 1;
+        }
 
-#ifdef G4VIS_USE
-  delete visManager;
-#endif
-  delete runManager;
+        if (optind < optmax)
+        {
+            G4String command = "/control/execute ";
+            for (; optind < optmax; optind++)
+            {
+                G4String macroFilename = argv[optind];
+                UImanager->ApplyCommand(command + macroFilename);
+            }
+        }
+    #else // Simple UI for Windows runs, no possibility of additional arguments
+        if (argc != 1)
+        {
+            G4String command = "/control/execute ";
+            G4String fileName = argv[1];
+            UImanager->ApplyCommand(command + fileName);
+        }
+    #endif
+    else
+    {
+        // Define (G)UI terminal for interactive mode
+        #ifdef G4UI_USE
+            G4UIExecutive* ui = new G4UIExecutive(argc, argv);
+            #ifdef G4VIS_USE
+                UImanager->ApplyCommand("/control/execute init.in");
+                // UImanager->ApplyCommand("/control/execute vis.mac");
+            #endif
+            if (ui->IsGUI())
+                UImanager->ApplyCommand("/control/execute gui.mac");
+            ui->SessionStart();
+            delete ui;
+        #endif
+    }
 
-  return 0;
+    // job termination
+
+    #ifdef G4VIS_USE
+        delete visManager;
+    #endif
+    delete runManager;
+
+    return 0;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+// ....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

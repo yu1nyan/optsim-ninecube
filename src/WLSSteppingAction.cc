@@ -188,14 +188,20 @@ void WLSSteppingAction::UserSteppingAction(const G4Step* theStep)
     if (theTrack->GetParentID() == 0)
     {
         // This is a primary track
-        if (theTrack->GetCurrentStepNumber() == 1)
-        {
-            //        G4double x  = theTrack->GetVertexPosition().x();
-            //        G4double y  = theTrack->GetVertexPosition().y();
-            //        G4double z  = theTrack->GetVertexPosition().z();
-            //        G4double pz = theTrack->GetVertexMomentumDirection().z();
-            //        G4double fInitTheta = theTrack->GetVertexMomentumDirection().angle(ZHat);
-        }
+        // if (theTrack->GetCurrentStepNumber() == 1)
+        // {
+        //
+        // }
+
+        // TrackがCubeに入ったとき/出たときのTrack位置を保存
+        G4ThreeVector pos = theStep->GetPreStepPoint()->GetPosition();
+        if (pos.getZ() == 5.0)
+            fEventAction->AddCubeInPos(pos);
+        else if(pos.getZ() == -5.0)
+            fEventAction->AddCubeOutPos(pos);
+
+        // G4double pz = theTrack->GetVertexMomentumDirection().z();
+        // G4double fInitTheta = theTrack->GetVertexMomentumDirection().angle(ZHat);
     }
 
     // Retrieve the status of the photon
@@ -388,6 +394,7 @@ void WLSSteppingAction::UserSteppingAction(const G4Step* theStep)
                         fEventAction->AddPhotCountZ(i, j, 1); // add
                         fEventAction->AddPhottime(theTrack->GetGlobalTime()); // add
                         fEventAction->AddPhotlasttime(theTrack->GetGlobalTime()); // add
+                        fEventAction->AddHittimeZ(i, j, theTrack->GetGlobalTime()); // add
                         // G4cout << "The time when a photn reached MPCC (for z-read out fiber_" << i << j << " ) = " << theTrack->GetGlobalTime() << G4endl;
                         ResetCounters();
                         theTrack->SetTrackStatus(fStopAndKill);

@@ -57,7 +57,7 @@ WLSEventAction::WLSEventAction(WLSRunAction* runaction, WLSPrimaryGeneratorActio
     /* initialize with different name */ fPrimarysource(primarysource),
     /* initialize with different name */ fStacking(stacking),
     fVerboseLevel(0),
-    fPrintModulo(100), fDrawFlag("all")
+    fPrintModulo(100), fDrawFlag("charged")
 {
     fMPPCCollID = 0;
 
@@ -96,7 +96,11 @@ void WLSEventAction::BeginOfEventAction(const G4Event* evt)
         fPhotCountY[j] = 0;
     for (int i = 0; i < 3; i++)
         for (int j = 0; j < 3; j++)
+        {
             fPhotCountZ[i][j] = 0;
+            fHittimeZ[i][j] = 0;
+        }
+
     fPhottime = 0;
     fPhotlasttime = 0;
 }
@@ -141,7 +145,12 @@ void WLSEventAction::EndOfEventAction(const G4Event* evt)
                 trj->DrawTrajectory();
             }
             else if ((fDrawFlag == "charged") && (trj->GetCharge() != 0.))
+            {
+                G4cout << "trjID: " << i << G4endl;
+                G4cout << "ParticleType: " << trj->GetParticleName() << G4endl;
                 trj->DrawTrajectory();
+            }
+
             else if (trj->GetParticleName() == "opticalphoton")
             {
                 G4cout << "We should be drawing an opticalphoton" << G4endl;
@@ -201,8 +210,17 @@ void WLSEventAction::EndOfEventAction(const G4Event* evt)
     G4cout << "<<< fPhotCountX_1= " << fPhotCountX[1] << G4endl; // add
     G4cout << "<<< fPhotCountY_1= " << fPhotCountY[1] << G4endl; // add
     G4cout << "<<< fPhotCountZ_11= " << fPhotCountZ[1][1] << G4endl; // add
-    G4cout << "<<< fPhotTime= "   << fPhottime   << G4endl;// add
+    G4cout << "<<< fPhotTime= "   << fPhottime   << G4endl; // add
     G4cout << "<<< fPhotlastTime= " << fPhotlasttime << G4endl; // add
+    G4cout << "<<< fHittimeZ_11= " << fHittimeZ[1][1] << G4endl;
+    G4cout << "<<< fCubeInPosX= " << fCubeInPos.getX() << G4endl;
+    G4cout << "<<< fCubeInPosY= " << fCubeInPos.getY() << G4endl;
+    G4cout << "<<< fCubeInPosZ= " << fCubeInPos.getZ() << G4endl;
+    G4cout << "<<< fCubeOutPosX= " << fCubeOutPos.getX() << G4endl;
+    G4cout << "<<< fCubeOutPosY= " << fCubeOutPos.getY() << G4endl;
+    G4cout << "<<< fCubeOutPosZ= " << fCubeOutPos.getZ() << G4endl;
+
+
 
     G4AnalysisManager* ana = G4AnalysisManager::Instance();
     int ii = 0;
@@ -218,9 +236,29 @@ void WLSEventAction::EndOfEventAction(const G4Event* evt)
         ana->FillNtupleDColumn(ii++, fPhotCountY[j]);
     for (int i = 0; i < 3; i++)
         for (int j = 0; j < 3; j++)
+        {
             ana->FillNtupleDColumn(ii++, fPhotCountZ[i][j]);
+        }
     ana->FillNtupleDColumn(ii++, fPhottime);
     ana->FillNtupleDColumn(ii++, fPhotlasttime);
+    for (int i = 0; i < 3; i++)
+    {
+        for (int j = 0; j < 3; j++)
+        {
+            if(fHittimeZ[i][j] != 0.0)
+                ana->FillNtupleDColumn(ii++, fHittimeZ[i][j]);
+            else
+                ii++;
+        }
+    }
+    ana->FillNtupleDColumn(ii++, fCubeInPos.getX());
+    ana->FillNtupleDColumn(ii++, fCubeInPos.getY());
+    ana->FillNtupleDColumn(ii++, fCubeInPos.getZ());
+
+    ana->FillNtupleDColumn(ii++, fCubeOutPos.getX());
+    ana->FillNtupleDColumn(ii++, fCubeOutPos.getY());
+    ana->FillNtupleDColumn(ii++, fCubeOutPos.getZ());
+
     ana->AddNtupleRow();
 }
 

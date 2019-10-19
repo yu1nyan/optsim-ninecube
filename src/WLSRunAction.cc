@@ -1,4 +1,4 @@
-//
+﻿//
 // ********************************************************************
 // * License and Disclaimer                                           *
 // *                                                                  *
@@ -42,92 +42,119 @@
 
 #include <ctime>
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+// ....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 WLSRunAction::WLSRunAction(G4String name)
-  : fSaveRndm(0), fAutoSeed(false), fName(name)
+    : fSaveRndm(0), fAutoSeed(false), fName(name)
 {
-  fRunMessenger = new WLSRunActionMessenger(this);
+    fRunMessenger = new WLSRunActionMessenger(this);
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+// ....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 WLSRunAction::~WLSRunAction()
 {
-  delete fRunMessenger;
+    delete fRunMessenger;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+// ....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void WLSRunAction::BeginOfRunAction(const G4Run* aRun)
 {
-  G4cout << "### Run " << aRun->GetRunID() << " start." << G4endl;
+    G4cout << "### Run " << aRun->GetRunID() << " start." << G4endl;
 
-  G4RunManager::GetRunManager()->SetRandomNumberStore(true);
-  G4RunManager::GetRunManager()->SetRandomNumberStoreDir("random/");
+    G4RunManager::GetRunManager()->SetRandomNumberStore(true);
+    G4RunManager::GetRunManager()->SetRandomNumberStoreDir("random/");
 
-  G4AnalysisManager* ana = G4AnalysisManager::Instance();
-  G4cout << "### G4AnalysisManager : " << ana->GetType() << G4endl;
-  char cname[32];
-	// Open an output file
-	ana->OpenFile(fName);
-	// Create ntuple
-	//ana->SetVerboseLevel(1);
-	ana->CreateNtuple("cube", "nine cubes");
-	ana->CreateNtupleDColumn("n"); 
-	ana->CreateNtupleDColumn("e"); 
-	ana->CreateNtupleDColumn("x"); 
-	ana->CreateNtupleDColumn("y"); 
-	ana->CreateNtupleDColumn("z"); 
-	ana->CreateNtupleDColumn("nPhotons"); 
-	for (int i = 0; i < 3; i++){
-	  sprintf(cname, "npx%d", i);
-	  ana->CreateNtupleDColumn(cname);
-	}
-	for (int j = 0; j < 3; j++){
-	  sprintf(cname, "npy%d", j);
-	  ana->CreateNtupleDColumn(cname);
-	}
-	for (int i = 0; i < 3; i++){
-	  for (int j = 0; j < 3; j++){
-	    sprintf(cname, "npz%d%d", i, j);
-	    ana->CreateNtupleDColumn(cname);
-	  }
-	}
-	ana->CreateNtupleDColumn("time");
-	ana->CreateNtupleDColumn("lasttime");
-	ana->FinishNtuple(0);
+    G4AnalysisManager* ana = G4AnalysisManager::Instance();
+    G4cout << "### G4AnalysisManager : " << ana->GetType() << G4endl;
+    char cname[32];
+    // Open an output file
+    ana->OpenFile(fName);
+    // Create ntuple
+    // ana->SetVerboseLevel(1);
+    ana->CreateNtuple("cube", "nine cubes");
+    ana->CreateNtupleDColumn("n");
+    ana->CreateNtupleDColumn("e");
+    ana->CreateNtupleDColumn("x");
+    ana->CreateNtupleDColumn("y");
+    ana->CreateNtupleDColumn("z");
+    ana->CreateNtupleDColumn("nPhotons");
+    for (int i = 0; i < 3; i++)
+    {
+        sprintf(cname, "npx%d", i);
+        ana->CreateNtupleDColumn(cname);
+    }
+    for (int j = 0; j < 3; j++)
+    {
+        sprintf(cname, "npy%d", j);
+        ana->CreateNtupleDColumn(cname);
+    }
+    for (int i = 0; i < 3; i++)
+    {
+        for (int j = 0; j < 3; j++)
+        {
+            sprintf(cname, "npz%d%d", i, j);
+            ana->CreateNtupleDColumn(cname);
+        }
+    }
+    ana->CreateNtupleDColumn("time");
+    ana->CreateNtupleDColumn("lasttime");
+    for (int i = 0; i < 3; i++)
+    {
+        for (int j = 0; j < 3; j++)
+        {
+            sprintf(cname, "hittimez%d%d", i, j);
+            ana->CreateNtupleDColumn(cname);
+        }
+    }
+    char coordinate[3] = { 'x', 'y', 'z' };
+    for (int i = 0; i < 3; i++)
+    {
+        sprintf(cname, "cubeinpos%c", coordinate[i]);
+        ana->CreateNtupleDColumn(cname);
+    }
+    for (int i = 0; i < 3; i++)
+    {
+        sprintf(cname, "cubeoutpos%c", coordinate[i]);
+        ana->CreateNtupleDColumn(cname);
+    }
 
-  if (fAutoSeed) {
-     // automatic (time-based) random seeds for each run
-     G4cout << "*******************" << G4endl;
-     G4cout << "*** AUTOSEED ON ***" << G4endl;
-     G4cout << "*******************" << G4endl;
-     long seeds[2];
-     time_t systime = time(NULL);
-     seeds[0] = (long) systime;
-     seeds[1] = (long) (systime*G4UniformRand());
-     G4Random::setTheSeeds(seeds);
-     G4Random::showEngineStatus();
-  } else {
-     G4Random::showEngineStatus();
-  }
+    ana->FinishNtuple(0);
 
-  if (fSaveRndm > 0) G4Random::saveEngineStatus("BeginOfRun.rndm");
+    if (fAutoSeed)
+    {
+        // automatic (time-based) random seeds for each run
+        G4cout << "*******************" << G4endl;
+        G4cout << "*** AUTOSEED ON ***" << G4endl;
+        G4cout << "*******************" << G4endl;
+        long seeds[2];
+        time_t systime = time(NULL);
+        seeds[0] = (long) systime;
+        seeds[1] = (long) (systime * G4UniformRand());
+        G4Random::setTheSeeds(seeds);
+        G4Random::showEngineStatus();
+    }
+    else
+    {
+        G4Random::showEngineStatus();
+    }
 
+    if (fSaveRndm > 0)
+        G4Random::saveEngineStatus("BeginOfRun.rndm");
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+// ....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void WLSRunAction::EndOfRunAction(const G4Run* )
+void WLSRunAction::EndOfRunAction(const G4Run*)
 {
-  if (fSaveRndm == 1)
-  {
-     G4Random::showEngineStatus();
-     G4Random::saveEngineStatus("endOfRun.rndm");
-  }
+    if (fSaveRndm == 1)
+    {
+        G4Random::showEngineStatus();
+        G4Random::saveEngineStatus("endOfRun.rndm");
+    }
 
-	G4AnalysisManager* ana = G4AnalysisManager::Instance(); 
-	ana->Write();
-	ana->CloseFile();
+    G4AnalysisManager* ana = G4AnalysisManager::Instance();
+    ana->Write();
+    ana->CloseFile();
 }
