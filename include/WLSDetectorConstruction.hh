@@ -1,4 +1,4 @@
-//
+﻿//
 // ********************************************************************
 // * License and Disclaimer                                           *
 // *                                                                  *
@@ -29,8 +29,8 @@
 /// \brief Definition of the WLSDetectorConstruction class
 //
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+// ....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+// ....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #ifndef WLSDetectorConstruction_h
 #define WLSDetectorConstruction_h 1
@@ -59,51 +59,50 @@ class WLSPhotonDetSD;
 
 class WLSDetectorConstruction : public G4VUserDetectorConstruction
 {
-  public:
-
-    WLSDetectorConstruction();
+public:
+    WLSDetectorConstruction(G4double, G4double, G4double, G4double);
     virtual ~WLSDetectorConstruction();
 
-    virtual G4VPhysicalVolume* Construct();
-    G4VPhysicalVolume* ConstructDetector();
+    virtual G4VPhysicalVolume*Construct();
+    G4VPhysicalVolume*        ConstructDetector();
 
-    virtual void ConstructSDandField();
+    virtual void              ConstructSDandField();
 
     // Set Material Commands for World and WLSfiber
-    void SetWorldMaterial         (G4String);
-    void SetWLSFiberMaterial      (G4String);
-    void SetCoupleMaterial        (G4String);
+    void SetWorldMaterial(G4String);
+    void SetWLSFiberMaterial(G4String);
+    void SetCoupleMaterial(G4String);
 
-    void SetPhotonDetGeometry     (G4String);
-    void SetNumberOfCladding      (G4int);        // Maximum 2 claddings
+    void SetPhotonDetGeometry(G4String);
+    void SetNumberOfCladding(G4int);        // Maximum 2 claddings
 
-    void SetWLSLength             (G4double);     // Total length of WLS fiber
-    void SetWLSRadius             (G4double);
-    void SetClad1Radius           (G4double);
-    void SetClad2Radius           (G4double);
-    void SetPhotonDetHalfLength   (G4double);
-    void SetGap                   (G4double);
-    void SetPhotonDetAlignment    (G4double);
+    void SetWLSLength(G4double);     // Total length of WLS fiber
+    void SetWLSRadius(G4double);
+    void SetClad1Radius(G4double);
+    void SetClad2Radius(G4double);
+    void SetPhotonDetHalfLength(G4double);
+    void SetGap(G4double);
+    void SetPhotonDetAlignment(G4double);
     // Set the ratio of x and y (x/y) radius of the ellipse
-    void SetXYRatio               (G4double);
+    void SetXYRatio(G4double);
     // Set the Roughness in between each layer
-    void SetSurfaceRoughness      (G4double);
+    void SetSurfaceRoughness(G4double);
     // Set the reflectivity of the mirror
-    void SetMirrorReflectivity    (G4double);
+    void SetMirrorReflectivity(G4double);
     // Set the polish of the mirror
-    void SetMirrorPolish          (G4double);
+    void SetMirrorPolish(G4double);
     // Set the reflectivity of the mirror
-    void SetPhotonDetReflectivity (G4double);
+    void SetPhotonDetReflectivity(G4double);
     // Set the polish of the mirror
-    void SetPhotonDetPolish       (G4double);
+    void SetPhotonDetPolish(G4double);
 
-    void SetMirror                (G4bool);
+    void SetMirror(G4bool);
 
-    void SetBarLength             (G4double);
-    void SetBarBase               (G4double);
-    void SetHoleRadius            (G4double);
-    void SetCoatingThickness      (G4double);
-    void SetCoatingRadius         (G4double);
+    void SetBarLength(G4double);
+    void SetBarBase(G4double);
+    void SetHoleRadius(G4double);
+    void SetCoatingThickness(G4double);
+    void SetCoatingRadius(G4double);
 
     G4double GetWLSFiberLength();
     G4double GetWLSFiberEnd();
@@ -118,7 +117,7 @@ class WLSDetectorConstruction : public G4VUserDetectorConstruction
 
     G4double GetCoatingThickness();
     G4double GetCoatingRadius();
- 
+
     // StringToRotationMatrix() converts a string "X90,Y45" into a
     // G4RotationMatrix.
     // This is an active rotation, in that the object is first rotated
@@ -131,70 +130,68 @@ class WLSDetectorConstruction : public G4VUserDetectorConstruction
     static G4RotationMatrix StringToRotationMatrix(G4String rotation);
 
     G4Material* FindMaterial(G4String);
+private:
+    WLSMaterials* fMaterials;
 
-  	private:
+    G4LogicalVolume* fLogiWorld;
+    G4LogicalVolume* fLogiExtrusion;
+    G4LogicalVolume* fLogiHole;
+    G4LogicalVolume* fLogiFiberHoleX;
+    G4LogicalVolume* fLogiFiberHoleY;
+    G4LogicalVolume* fLogiFiberHoleZ;
 
-  	WLSMaterials* fMaterials;
-
-   G4LogicalVolume* fLogiWorld;
-	G4LogicalVolume* fLogiExtrusion;
-   G4LogicalVolume* fLogiHole;
-   G4LogicalVolume* fLogiFiberHoleX;
-   G4LogicalVolume* fLogiFiberHoleY;
-   G4LogicalVolume* fLogiFiberHoleZ;
-
-   G4LogicalVolume* logicScintillator;
-   G4VPhysicalVolume* physScintillator;
+    G4LogicalVolume* logicScintillator;
+    G4VPhysicalVolume* physScintillator;
 
 
-   G4VPhysicalVolume* fPhysWorld;
-   G4VPhysicalVolume* fPhysExtrusion[3][3];
-   G4VPhysicalVolume* fPhysHole;
-   G4VPhysicalVolume* fPhysFiberHoleX;
-   G4VPhysicalVolume* fPhysFiberHoleY;
-   G4VPhysicalVolume* fPhysFiberHoleZ;
- 
-    G4double           fWorldSizeX;
-    G4double           fWorldSizeY;
-    G4double           fWorldSizeZ;
+    G4VPhysicalVolume* fPhysWorld;
+    G4VPhysicalVolume* fPhysExtrusion[3][3];
+    G4VPhysicalVolume* fPhysHole;
+    G4VPhysicalVolume* fPhysFiberHoleX;
+    G4VPhysicalVolume* fPhysFiberHoleY;
+    G4VPhysicalVolume* fPhysFiberHoleZ;
 
-    G4double           fWLSfiberRX;
-    G4double           fWLSfiberRY;
-    G4double           fWLSfiberZ;
+    G4double fWorldSizeX;
+    G4double fWorldSizeY;
+    G4double fWorldSizeZ;
 
-    G4double           fWLSfiberl;
+    G4double fWLSfiberRX;
+    G4double fWLSfiberRY;
+    G4double fWLSfiberZ;
 
-    G4double           fClad1RX;
-    G4double           fClad1RY;
-    G4double           fClad1Z;
+    G4double fWLSfiberl;
 
-    G4double           fClad2RX;
-    G4double           fClad2RY;
-    G4double           fClad2Z;
+    G4double fClad1RX;
+    G4double fClad1RY;
+    G4double fClad1Z;
 
-    G4double           fClrfiberHalfL;
-    G4double           fClrfiberZ;
+    G4double fClad2RX;
+    G4double fClad2RY;
+    G4double fClad2Z;
 
-    G4double           fCoupleRX;
-    G4double           fCoupleRY;
-    G4double           fCoupleZ;
- 
-    G4double           fMirrorRmax;
-    G4double           fMirrorZ;
-    G4bool             fMirrorToggle;
- 
-    G4String           fMPPCShape;
-    G4double           fMPPCHalfL;
-    G4double           fMPPCZ;
-    G4double           fMPPCDist;
-    G4double           fMPPCTheta;
+    G4double fClrfiberHalfL;
+    G4double fClrfiberZ;
+
+    G4double fCoupleRX;
+    G4double fCoupleRY;
+    G4double fCoupleZ;
+
+    G4double fMirrorRmax;
+    G4double fMirrorZ;
+    G4bool fMirrorToggle;
+
+    G4String fMPPCShape;
+    G4double fMPPCHalfL;
+    G4double fMPPCZ;
+    G4double fMPPCDist;
+    G4double fMPPCTheta;
 
     G4double fWLSfiberOrigin;
     G4double fCoupleOrigin;
     G4double fMirrorOrigin;
     G4double fMPPCOriginX;
     G4double fMPPCOriginZ;
- 
+
     G4int fNumOfCladLayers;
 
     G4double fMirrorPolish;
@@ -208,18 +205,17 @@ class WLSDetectorConstruction : public G4VUserDetectorConstruction
     G4double fBarBase;
     G4double fHoleRadius;
     G4double fHoleLength;
+    G4double fHolePos;
     G4double fCoatingThickness;
     G4double fCoatingRadius;
+    G4double fCubeReflectivity;
+private:
+    void ConstructFiber();
 
-  private:
+    void UpdateGeometryParameters();
 
-     void ConstructFiber();
-
-     void UpdateGeometryParameters();
-
-     WLSDetectorMessenger* fDetectorMessenger;
-     G4Cache<WLSPhotonDetSD*> fmppcSD;
-
+    WLSDetectorMessenger* fDetectorMessenger;
+    G4Cache<WLSPhotonDetSD*> fmppcSD;
 };
 
 #endif
