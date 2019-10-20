@@ -117,7 +117,7 @@ namespace parameter
     const G4double sigma_alpha = 0.0;
 
     // detection eff. of MPPC
-    const G4double effi_mppc[] = {0.35, 0.30}; //
+    const G4double effi_mppc[] = {0.20, 0.20}; //
 
 
 }
