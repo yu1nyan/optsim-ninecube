@@ -79,7 +79,7 @@ int main(int argc, char** argv)
         else
             inpName = "cube";
 
-        G4double length = 200;
+        G4double length = 200;  // cm
         G4double gaplength;
         G4double mirror_reflectivity = 0;
         G4double cube_reflectivity = 0.97;
