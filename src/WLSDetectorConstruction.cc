@@ -65,8 +65,14 @@
 #include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"
 
+#include "parameter.hh"
+
 // ....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+// length: Length of WLS fiber (cm)
+// gaplength:
+// mirror_reflectivity:
+// cube_reflectivity: reflectivity of cube coating
 WLSDetectorConstruction::WLSDetectorConstruction(double length, double gaplength, double mirror_reflectivity, double cube_reflectivity)
 // : fMaterials(NULL), fLogiHole(NULL), fLogiWorld(NULL),
     : fMaterials(NULL), fLogiFiberHoleX(NULL), fLogiFiberHoleY(NULL), fLogiFiberHoleZ(NULL),
@@ -277,7 +283,7 @@ G4VPhysicalVolume*WLSDetectorConstruction::ConstructDetector()
     // http://wiki.opengatecollaboration.org/index.php/Users_Guide:Generating_and_tracking_optical_photons
     // This parameter defines the standard deviation of the Gaussian distribution
     //	of micro-facets around the average surface normal
-    TiO2Surface->SetSigmaAlpha(0.0);
+    TiO2Surface->SetSigmaAlpha(parameter::sigma_alpha);
     TiO2Surface->SetMaterialPropertiesTable(TiO2SurfaceProperty);
 
     new G4LogicalSkinSurface("TiO2Surface", fLogiExtrusion, TiO2Surface);
@@ -665,7 +671,7 @@ void WLSDetectorConstruction::ConstructFiber()
     assert(sizeof(refl_mppc) == sizeof(p_mppc));
     // ----- efficiency parameter
     // G4double effi_mppc[] = { 1, 1 };   // original
-    G4double effi_mppc[] = { 0.35, 0.30 }; //
+    G4double effi_mppc[] = { parameter::effi_mppc[0], parameter::effi_mppc[1] }; //
     assert(sizeof(effi_mppc) == sizeof(p_mppc));
 
     photonDetSurfProp->AddProperty("REFLECTIVITY", p_mppc, refl_mppc, nbins);
