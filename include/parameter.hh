@@ -1,9 +1,10 @@
-#pragma once
+﻿#pragma once
 
 #include "G4SystemOfUnits.hh"
 #include "G4Types.hh"
 
 const int NSpectrum = 50;
+const int NSpectrumMPPC = 14;
 
 namespace parameter
 {
@@ -14,6 +15,18 @@ namespace parameter
     ////////////////////////
     // WLSMaterials.cc //
     ////////////////////////
+
+    //
+    // ------------ Generate & Add Material Properties Table ------------
+    //
+    // [nm]
+    // 620      610.837     601.942     593.301  584.906     576.744     568.807  561.086     553.571     546.256
+    // 539.13   532.189     525.424     518.828  512.397     506.122     500      494.024     488.189     482.49
+    // 476.923  471.483     466.165     460.967  455.882     450.909     446.043  441.281     436.62      432.056
+    // 427.586  423.208     418.919     414.716  410.596     406.557     402.597  398.714     394.904     391.167
+    // 387.5    383.901     380.368     376.9    373.494     370.149     366.864  363.636     360.465     357.349
+
+
 
     // att. length of sci-cube
     // http://lss.fnal.gov/archive/2005/pub/fermilab-pub-05-344.pdf
@@ -116,8 +129,31 @@ namespace parameter
     // sigma_alpha
     const G4double sigma_alpha = 0.0;
 
+
+
+    // [nm]
+    // 620         576.744    546.256
+    // 512.397     482.49
+    // 460.967     432.056
+    // 414.716     398.714    391.167
+    // 380.368     370.149    363.636    357.349
+
+
+
+    const G4double photonEnergy_mppc[] = {
+        2.00 * eV, 2.15 * eV, 2.27 * eV,
+        2.42 * eV, 2.57 * eV,
+        2.69 * eV, 2.87 * eV,
+        2.99 * eV, 3.11 * eV, 3.17 * eV,
+        3.26 * eV, 3.35 * eV, 3.41 * eV, 3.47 * eV
+    };
+
     // detection eff. of MPPC
-    const G4double effi_mppc[] = {0.20, 0.20}; //
-
-
+    const G4double effi_mppc[] = {
+        0.155, 0.189, 0.213,
+        0.240, 0.252,
+        0.257, 0.248,
+        0.238, 0.224, 0.215,
+        0.196, 0.175, 0.163, 0.150
+    }; //
 }

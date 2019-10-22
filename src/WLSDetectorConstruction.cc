@@ -662,16 +662,28 @@ void WLSDetectorConstruction::ConstructFiber()
 
     G4MaterialPropertiesTable* photonDetSurfProp = new G4MaterialPropertiesTable();
 
-    G4double p_mppc[] = { 2.00 * eV, 3.47 * eV };
+    G4double p_mppc[NSpectrumMPPC];
+    for (int i = 0; i < NSpectrumMPPC; i++)
+    {
+        p_mppc[i] = parameter::photonEnergy_mppc[i];
+    }
     const G4int nbins = sizeof(p_mppc) / sizeof(G4double);
 
     // ----- refrection parameter
     fMPPCReflectivity = 0;
-    G4double refl_mppc[] = { fMPPCReflectivity, fMPPCReflectivity };
+    G4double refl_mppc[NSpectrumMPPC];
+    for (int i = 0; i < NSpectrumMPPC; i++)
+    {
+        refl_mppc[i] = fMPPCReflectivity;
+    }
     assert(sizeof(refl_mppc) == sizeof(p_mppc));
     // ----- efficiency parameter
     // G4double effi_mppc[] = { 1, 1 };   // original
-    G4double effi_mppc[] = { parameter::effi_mppc[0], parameter::effi_mppc[1] }; //
+    G4double effi_mppc[NSpectrumMPPC];
+    for (int i = 0; i < NSpectrumMPPC; i++)
+    {
+        effi_mppc[i] = parameter::effi_mppc[i];
+    }
     assert(sizeof(effi_mppc) == sizeof(p_mppc));
 
     photonDetSurfProp->AddProperty("REFLECTIVITY", p_mppc, refl_mppc, nbins);
