@@ -124,7 +124,7 @@ public:
             fPhotlasttime = a;
     }                                                    // add
     // z readout ごとに最初に来た時間
-    void AddHittimeZ(G4int i, G4int j, G4int a)
+    void AddHittimeZ(G4int i, G4int j, G4double a)
     {
         if (fHittimeZ[i][j] == 0 || fHittimeZ[i][j] > a)
             fHittimeZ[i][j] = a;
