@@ -79,7 +79,11 @@ int main(int argc, char** argv)
             inpName = "cube";
 
         if (argc  > 3)
+        {
             seed = atoi(argv[3]);
+            G4cout << "seed = " << seed << G4endl;
+        }
+
 
         G4double length = 200;  // cm
         G4double gaplength;
