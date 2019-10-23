@@ -206,7 +206,7 @@ G4VPhysicalVolume*WLSDetectorConstruction::ConstructDetector()
     solidSciCube = new G4SubtractionSolid("solSubSciCube", solidSciCube, fFiberHole, rotMY, ypVec);
     solidSciCube = new G4SubtractionSolid("solSubSciCube", solidSciCube, fFiberHole, 0,    zpVec);
 
-    fLogiExtrusion = new G4LogicalVolume(solidExtrusion, FindMaterial("Coating"), "Extrusion");
+    fLogiExtrusion = new G4LogicalVolume(solidExtrusion, FindMaterial("Polystyrene"), "Extrusion");
     logicScintillator = new G4LogicalVolume(solidSciCube, FindMaterial("Polystyrene"), "SciCube");
 
     for (int i = 0; i < 3; i++)

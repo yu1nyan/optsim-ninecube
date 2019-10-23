@@ -39,7 +39,8 @@ namespace parameter
     };
 
     // scintillation light yield (Typical value of POPOP)
-    const G4double scintiLY = 10. / keV;
+    // const G4double scintiLY = 10. / keV;
+    const G4double scintiLY = 20. / keV;
 
     // POPOP second emission : https://doi.org/10.1016/j.nima.2007.04.147
     const G4double scintilFast[] = {
