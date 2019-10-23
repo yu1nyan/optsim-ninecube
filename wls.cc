@@ -70,8 +70,7 @@ int main(int argc, char** argv)
         G4MTRunManager* runManager = new G4MTRunManager;
     #else
         G4int seed = 123;
-        if (argc  > 2)
-            seed = atoi(argv[argc - 1]);
+
 
         G4String inpName;
         if (argc > 2)
@@ -79,19 +78,22 @@ int main(int argc, char** argv)
         else
             inpName = "cube";
 
+        if (argc  > 3)
+            seed = atoi(argv[3]);
+            
         G4double length = 200;  // cm
         G4double gaplength;
         G4double mirror_reflectivity = 0;
         G4double cube_reflectivity = 0.97;
-        if (argc > 3)
-            length = atof(argv[3]);
-        gaplength = length / 2;
-        if (argc > 4)
-            gaplength = atof(argv[4]);
-        if (argc > 5)
-            mirror_reflectivity = atof(argv[5]);
-        if (argc > 6)
-            cube_reflectivity = atof(argv[6]);
+        // if (argc > 3)
+        //     length = atof(argv[3]);
+        // gaplength = length / 2;
+        // if (argc > 4)
+        //     gaplength = atof(argv[4]);
+        // if (argc > 5)
+        //     mirror_reflectivity = atof(argv[5]);
+        // if (argc > 6)
+        //     cube_reflectivity = atof(argv[6]);
 
         if (argv[1] != NULL)
             G4cout << "input macro  name is " << argv[1] << G4endl;
