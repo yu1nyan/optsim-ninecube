@@ -80,14 +80,14 @@ int main(int argc, char** argv)
 
         if (argc  > 3)
             seed = atoi(argv[3]);
-            
+
         G4double length = 200;  // cm
         G4double gaplength;
         G4double mirror_reflectivity = 0;
         G4double cube_reflectivity = 0.97;
         // if (argc > 3)
         //     length = atof(argv[3]);
-        // gaplength = length / 2;
+        gaplength = length / 2;
         // if (argc > 4)
         //     gaplength = atof(argv[4]);
         // if (argc > 5)
