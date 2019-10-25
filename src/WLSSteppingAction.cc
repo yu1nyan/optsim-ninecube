@@ -392,8 +392,8 @@ void WLSSteppingAction::UserSteppingAction(const G4Step* theStep)
                     if (thePostPVname == pvname)
                     {
                         fEventAction->AddPhotCountZ(i, j, 1); // add
-                        fEventAction->AddPhottime(theTrack->GetGlobalTime()); // add
-                        fEventAction->AddPhotlasttime(theTrack->GetGlobalTime()); // add
+                        // fEventAction->AddPhottime(theTrack->GetGlobalTime()); // add
+                        // fEventAction->AddPhotlasttime(theTrack->GetGlobalTime()); // add
                         fEventAction->AddHittimeZ(i, j, theTrack->GetGlobalTime()); // add
                         // G4cout << "The time when a photn reached MPCC (for z-read out fiber_" << i << j << " ) = " << theTrack->GetGlobalTime() << G4endl;
                         ResetCounters();
