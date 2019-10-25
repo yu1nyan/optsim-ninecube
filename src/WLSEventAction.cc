@@ -150,10 +150,16 @@ void WLSEventAction::EndOfEventAction(const G4Event* evt)
                 G4cout << "ParticleType: " << trj->GetParticleName() << G4endl;
                 trj->DrawTrajectory();
             }
+            else if (trj->GetParticleName() == "gamma")
+            {
+                G4cout << "trjID: " << i << G4endl;
+                G4cout << "ParticleType: " << trj->GetParticleName() << G4endl;
+                trj->DrawTrajectory();
+            }
 
             else if (trj->GetParticleName() == "opticalphoton")
             {
-                G4cout << "We should be drawing an opticalphoton" << G4endl;
+                // G4cout << "We should be drawing an opticalphoton" << G4endl;
                 trj->SetForceDrawTrajectory(fForceDrawPhotons);
                 trj->SetForceNoDrawTrajectory(fForceNoPhotons);
                 trj->DrawTrajectory();
