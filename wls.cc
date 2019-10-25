@@ -35,7 +35,7 @@
 #endif
 
 #include <regex>
-#include <iostream>
+// #include <iostream>
 using namespace std;
 
 #ifdef G4MULTITHREADED
