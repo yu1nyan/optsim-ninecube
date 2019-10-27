@@ -34,9 +34,9 @@
     #include <unistd.h>
 #endif
 
-#include <regex>
+// #include <regex>
 // #include <iostream>
-using namespace std;
+// using namespace std;
 
 #ifdef G4MULTITHREADED
     #include "G4MTRunManager.hh"
@@ -88,43 +88,50 @@ int main(int argc, char** argv)
         G4double mirror_reflectivity = 0;
         G4double cube_reflectivity = 0.97;
 
-        if (argc  > 3)
+        if (argc > 3)
         {
-            regex search_regex(R"(^(seed|fiber_length|gap_length|mirror_reflectivity|cube_reflectivity)\s*=\s*(([1-9]\d*|0)(\.\d+)?$))");
-            smatch matched_words;
-            for(int i=3; i<argc; i++)
-            {
-                string arg = argv[i];
-                if(regex_match(arg, matched_words, search_regex))
-                {
-                    cout << matched_words[1] << ": " << matched_words[2] << endl;
-                    if(matched_words[1] == "seed")
-                    {
-                        seed = stoi(matched_words[2]);
-                    }
-                    else if(matched_words[1] == "fiber_length")
-                    {
-                        fiber_length = stod(matched_words[2]);
-                    }
-                    else if(matched_words[1] == "gap_length")
-                    {
-                        gap_length = stod(matched_words[2]);
-                    }
-                    else if(matched_words[1] == "mirror_reflectivity")
-                    {
-                        mirror_reflectivity = stod(matched_words[2]);
-                    }
-                    else if(matched_words[1] == "cube_reflectivity")
-                    {
-                        cube_reflectivity = stod(matched_words[2]);
-                    }
-                    else
-                    {
-                        cerr << "Parameter setting error!" << endl;
-                        return 1;
-                    }
-                }
-            }
+            seed = atoi(argv[3]);
+            // regex search_regex(R"(^(seed|fiber_length|gap_length|mirror_reflectivity|cube_reflectivity)\s*=\s*(([1-9]\d*|0)(\.\d+)?$))");
+            // smatch matched_words;
+            // for(int i=3; i<argc; i++)
+            // {
+            //     string arg = argv[i];
+            //     if(regex_match(arg, matched_words, search_regex))
+            //     {
+            //         cout << matched_words[1] << ": " << matched_words[2] << endl;
+            //         if(matched_words[1] == "seed")
+            //         {
+            //             seed = stoi(matched_words[2]);
+            //         }
+            //         else if(matched_words[1] == "fiber_length")
+            //         {
+            //             fiber_length = stod(matched_words[2]);
+            //         }
+            //         else if(matched_words[1] == "gap_length")
+            //         {
+            //             gap_length = stod(matched_words[2]);
+            //         }
+            //         else if(matched_words[1] == "mirror_reflectivity")
+            //         {
+            //             mirror_reflectivity = stod(matched_words[2]);
+            //         }
+            //         else if(matched_words[1] == "cube_reflectivity")
+            //         {
+            //             cube_reflectivity = stod(matched_words[2]);
+            //         }
+            //         else
+            //         {
+            //             cerr << "Parameter setting error!" << endl;
+            //             return 1;
+            //         }
+            //     }
+            // }
+        }
+        if(argc > 4)
+        {
+            G4cerr << "wls <macro file name> <root file name> <seed>" << G4endl;
+            return 1;
+
         }
 
         if (argv[1] != NULL)
