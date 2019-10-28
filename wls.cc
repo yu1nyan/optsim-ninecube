@@ -34,6 +34,10 @@
     #include <unistd.h>
 #endif
 
+// #include <regex>
+// #include <iostream>
+// using namespace std;
+
 #ifdef G4MULTITHREADED
     #include "G4MTRunManager.hh"
 #else
@@ -69,9 +73,8 @@ int main(int argc, char** argv)
     #ifdef G4MULTITHREADED
         G4MTRunManager* runManager = new G4MTRunManager;
     #else
-        G4int seed = 123;
-        if (argc  > 2)
-            seed = atoi(argv[argc - 1]);
+
+
 
         G4String inpName;
         if (argc > 2)
@@ -79,24 +82,70 @@ int main(int argc, char** argv)
         else
             inpName = "cube";
 
-        G4double length = 200;
-        G4double gaplength;
+        G4int seed = 123;
+        G4double fiber_length = 200;  // cm
+        G4double gap_length = fiber_length/2;
         G4double mirror_reflectivity = 0;
         G4double cube_reflectivity = 0.97;
+
         if (argc > 3)
-            length = atof(argv[3]);
-        gaplength = length / 2;
-        if (argc > 4)
-            gaplength = atof(argv[4]);
-        if (argc > 5)
-            mirror_reflectivity = atof(argv[5]);
-        if (argc > 6)
-            cube_reflectivity = atof(argv[6]);
+        {
+            seed = atoi(argv[3]);
+            // regex search_regex(R"(^(seed|fiber_length|gap_length|mirror_reflectivity|cube_reflectivity)\s*=\s*(([1-9]\d*|0)(\.\d+)?$))");
+            // smatch matched_words;
+            // for(int i=3; i<argc; i++)
+            // {
+            //     string arg = argv[i];
+            //     if(regex_match(arg, matched_words, search_regex))
+            //     {
+            //         cout << matched_words[1] << ": " << matched_words[2] << endl;
+            //         if(matched_words[1] == "seed")
+            //         {
+            //             seed = stoi(matched_words[2]);
+            //         }
+            //         else if(matched_words[1] == "fiber_length")
+            //         {
+            //             fiber_length = stod(matched_words[2]);
+            //         }
+            //         else if(matched_words[1] == "gap_length")
+            //         {
+            //             gap_length = stod(matched_words[2]);
+            //         }
+            //         else if(matched_words[1] == "mirror_reflectivity")
+            //         {
+            //             mirror_reflectivity = stod(matched_words[2]);
+            //         }
+            //         else if(matched_words[1] == "cube_reflectivity")
+            //         {
+            //             cube_reflectivity = stod(matched_words[2]);
+            //         }
+            //         else
+            //         {
+            //             cerr << "Parameter setting error!" << endl;
+            //             return 1;
+            //         }
+            //     }
+            // }
+        }
+        if(argc > 4)
+        {
+            G4cerr << "wls <macro file name> <root file name> <seed>" << G4endl;
+            return 1;
+
+        }
 
         if (argv[1] != NULL)
-            G4cout << "input macro  name is " << argv[1] << G4endl;
-        G4cout << "input rootfile name is " << inpName << G4endl;
-        G4cout << "length : gaplength : mirror_reflectivity : cube_reflectivity" << length << " " << gaplength << " " << mirror_reflectivity << " " << cube_reflectivity << G4endl;
+        {
+            G4cout << "input macro name is " << argv[1] << G4endl;
+        }
+
+        G4cout << "input rootfile name: " << inpName << G4endl;
+
+        G4cout << "seed: " << seed << G4endl;
+        G4cout << "fiber_length: " << fiber_length << G4endl;
+        G4cout << "gap_length: " << gap_length <<G4endl;
+        G4cout << "mirror_reflectivity: " << mirror_reflectivity <<G4endl;
+        G4cout << "cube_reflectivity: " << cube_reflectivity << G4endl;
 
         // Choose the Random engine and set the seed
 
@@ -130,7 +179,7 @@ int main(int argc, char** argv)
     // Set mandatory initialization classes
     //
     // Detector construction
-    WLSDetectorConstruction* detector = new WLSDetectorConstruction(length, gaplength, mirror_reflectivity, cube_reflectivity);
+    WLSDetectorConstruction* detector = new WLSDetectorConstruction(fiber_length, gap_length, mirror_reflectivity, cube_reflectivity);
     runManager->SetUserInitialization(detector);
     // Physics list
     runManager->SetUserInitialization(new WLSPhysicsList(physName));

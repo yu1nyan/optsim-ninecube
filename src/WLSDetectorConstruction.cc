@@ -65,8 +65,14 @@
 #include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"
 
+#include "parameter.hh"
+
 // ....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+// length: Length of WLS fiber (cm)
+// gaplength:
+// mirror_reflectivity:
+// cube_reflectivity: reflectivity of cube coating
 WLSDetectorConstruction::WLSDetectorConstruction(double length, double gaplength, double mirror_reflectivity, double cube_reflectivity)
 // : fMaterials(NULL), fLogiHole(NULL), fLogiWorld(NULL),
     : fMaterials(NULL), fLogiFiberHoleX(NULL), fLogiFiberHoleY(NULL), fLogiFiberHoleZ(NULL),
@@ -200,7 +206,7 @@ G4VPhysicalVolume*WLSDetectorConstruction::ConstructDetector()
     solidSciCube = new G4SubtractionSolid("solSubSciCube", solidSciCube, fFiberHole, rotMY, ypVec);
     solidSciCube = new G4SubtractionSolid("solSubSciCube", solidSciCube, fFiberHole, 0,    zpVec);
 
-    fLogiExtrusion = new G4LogicalVolume(solidExtrusion, FindMaterial("Coating"), "Extrusion");
+    fLogiExtrusion = new G4LogicalVolume(solidExtrusion, FindMaterial("Polystyrene"), "Extrusion");
     logicScintillator = new G4LogicalVolume(solidSciCube, FindMaterial("Polystyrene"), "SciCube");
 
     for (int i = 0; i < 3; i++)
@@ -277,7 +283,7 @@ G4VPhysicalVolume*WLSDetectorConstruction::ConstructDetector()
     // http://wiki.opengatecollaboration.org/index.php/Users_Guide:Generating_and_tracking_optical_photons
     // This parameter defines the standard deviation of the Gaussian distribution
     //	of micro-facets around the average surface normal
-    TiO2Surface->SetSigmaAlpha(0.0);
+    TiO2Surface->SetSigmaAlpha(parameter::sigma_alpha);
     TiO2Surface->SetMaterialPropertiesTable(TiO2SurfaceProperty);
 
     new G4LogicalSkinSurface("TiO2Surface", fLogiExtrusion, TiO2Surface);
@@ -656,16 +662,28 @@ void WLSDetectorConstruction::ConstructFiber()
 
     G4MaterialPropertiesTable* photonDetSurfProp = new G4MaterialPropertiesTable();
 
-    G4double p_mppc[] = { 2.00 * eV, 3.47 * eV };
+    G4double p_mppc[NSpectrumMPPC];
+    for (int i = 0; i < NSpectrumMPPC; i++)
+    {
+        p_mppc[i] = parameter::photonEnergy_mppc[i];
+    }
     const G4int nbins = sizeof(p_mppc) / sizeof(G4double);
 
     // ----- refrection parameter
     fMPPCReflectivity = 0;
-    G4double refl_mppc[] = { fMPPCReflectivity, fMPPCReflectivity };
+    G4double refl_mppc[NSpectrumMPPC];
+    for (int i = 0; i < NSpectrumMPPC; i++)
+    {
+        refl_mppc[i] = fMPPCReflectivity;
+    }
     assert(sizeof(refl_mppc) == sizeof(p_mppc));
     // ----- efficiency parameter
     // G4double effi_mppc[] = { 1, 1 };   // original
-    G4double effi_mppc[] = { 0.35, 0.30 }; //
+    G4double effi_mppc[NSpectrumMPPC];
+    for (int i = 0; i < NSpectrumMPPC; i++)
+    {
+        effi_mppc[i] = parameter::effi_mppc[i];
+    }
     assert(sizeof(effi_mppc) == sizeof(p_mppc));
 
     photonDetSurfProp->AddProperty("REFLECTIVITY", p_mppc, refl_mppc, nbins);
