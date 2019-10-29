@@ -623,14 +623,14 @@ void WLSDetectorConstruction::ConstructFiber()
         G4double xoffset_val = (i - 1) * sci_pitch;
         sprintf(pvname, "PhotonDetX%d", i);
         // new G4PVPlacement(rotMX, G4ThreeVector(xoffset_val + fiber_pos, fWLSfiberZ - fWLSfiberl, +fiber_pos), logicPhotonDetX, pvname, fLogiWorld, false, 0);
-        new G4PVPlacement(rotMX, G4ThreeVector(xoffset_val + fHolePos, fWLSfiberZ - fWLSfiberl, xoffset_val + fHolePos), logicPhotonDetX, pvname, fLogiWorld, false, 0);
+        new G4PVPlacement(rotMX, G4ThreeVector(xoffset_val + fHolePos, fWLSfiberZ - fWLSfiberl, xoffset_val + fHolePos), logicPhotonDetX, pvname, fLogiWorld, false, i+1);
     }
     for (int j = 0; j < 3; j++)
     {
         G4double yoffset_val = (j - 1) * sci_pitch;
         sprintf(pvname, "PhotonDetY%d", j);
         // new G4PVPlacement(rotMY, G4ThreeVector(fWLSfiberZ - fWLSfiberl, yoffset_val + fiber_pos, -fiber_pos), logicPhotonDetY, pvname, fLogiWorld, false, 0);
-        new G4PVPlacement(rotMY, G4ThreeVector(fWLSfiberZ - fWLSfiberl, yoffset_val + fHolePos, -fHolePos), logicPhotonDetY, pvname, fLogiWorld, false, 0);
+        new G4PVPlacement(rotMY, G4ThreeVector(fWLSfiberZ - fWLSfiberl, yoffset_val + fHolePos, -fHolePos), logicPhotonDetY, pvname, fLogiWorld, false, j+3+1);
     }
     for (int i = 0; i < 3; i++)
     {
@@ -640,7 +640,7 @@ void WLSDetectorConstruction::ConstructFiber()
             G4double yoffset_val = (j - 1) * sci_pitch;
             sprintf(pvname, "PhotonDetZ%d%d", i, j);
             // new G4PVPlacement(0, G4ThreeVector(xoffset_val - fiber_pos, yoffset_val - fiber_pos, fWLSfiberZ - fWLSfiberl), logicPhotonDetZ, pvname, fLogiWorld, false, 0);
-            new G4PVPlacement(0, G4ThreeVector(xoffset_val - fHolePos, yoffset_val - fHolePos, fWLSfiberZ - fWLSfiberl), logicPhotonDetZ, pvname, fLogiWorld, false, 0);
+            new G4PVPlacement(0, G4ThreeVector(xoffset_val - fHolePos, yoffset_val - fHolePos, fWLSfiberZ - fWLSfiberl), logicPhotonDetZ, pvname, fLogiWorld, false, 3*i+j+6+1);
         }
     }
 

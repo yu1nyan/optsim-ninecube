@@ -1,0 +1,11 @@
+/run/initialize
+/gps/particle e+
+/gps/ene/mono 500 MeV
+/gps/direction 0 0 -1 #Set momentum direction
+/gps/pos/centre 0 0 5 cm
+/gps/pos/type Plane
+/gps/pos/shape Square
+/gps/pos/halfx 0.5 cm
+/gps/pos/halfy 0.5 cm
+
+/run/beamOn 100
