@@ -100,7 +100,7 @@ void WLSOpticalPhysics::ConstructProcess()
 
   pManager->AddDiscreteProcess(fBoundaryProcess);
 
-  fWLSProcess->UseTimeProfile("delta");
+  fWLSProcess->UseTimeProfile("exponential");
   //fWLSProcess->UseTimeProfile("exponential");
 
   pManager->AddDiscreteProcess(fWLSProcess);
